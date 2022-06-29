@@ -1,15 +1,17 @@
 import 'dart:io';
-
 import 'package:firstproject/ui/screens/iitem_details_screen.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_no_internet_widget/flutter_no_internet_widget.dart';
 import 'package:get/get.dart';
-
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:overlay_support/overlay_support.dart';
 import '../../services/apis/delete_intern_api.dart';
 import '../../services/apis/intern_list_api.dart';
 import '../../services/models/list_model.dart';
 import 'add_intern_screen.dart';
 import 'add_themes.dart';
+import 'internet.dart';
+
 
 class ListScreen extends StatefulWidget {
   ListScreen({Key? key}) : super(key: key);
@@ -21,27 +23,55 @@ class ListScreen extends StatefulWidget {
 class _ListScreenState extends State<ListScreen> {
   var api = InternListApi();
 
+
+  //
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   // Internet().checkInternetCon();
+  //   InternetConnectionChecker().onStatusChange.listen((event) {status});
+  //   final connected = status == InternetConnectionStatus.connected;
+  //   connected? showSimpleNotification(Text(connected? "Connected to internet" : "No internet"));
+  //
+  // }
+
+  final List locale = [
+    {'name': 'English', 'locale': Locale('en', 'US')},
+    {'name': 'हिन्दी', 'locale': Locale('hi', 'IN')},
+    {'name': 'ગુજરાતી', 'locale': Locale('gu', 'IN')},
+    {'name': 'મરાઠી', 'locale': Locale('mr', 'IN')}
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Interns List"),
-        // backgroundColor: Colors.blueGrey,
-        // shadowColor: Colors.brown,
+        title: Text('internslist'.tr),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: IconButton(
+                onPressed: () {
+                  builddialog(context);
+                },
+                icon: Icon(Icons.language),
+              )),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             ListTile(
               leading: Icon(Icons.add),
-              title: Text(" Add New Interns"),
+              title: Text('addnewinterns'.tr),
               onTap: () {
                 Get.to(AddIntern());
               },
             ),
             ListTile(
               leading: Icon(Icons.add),
-              title: Text("Themes "),
+              title: Text('themes'.tr),
               onTap: () {
                 Get.to(AddThemes());
               },
@@ -51,97 +81,140 @@ class _ListScreenState extends State<ListScreen> {
         ),
       ),
       // backgroundColor: Colors.white,
-      body: Container(
-        child: Center(
-          child: FutureBuilder(
-            future: api.fetchApi(),
-            builder: (context, AsyncSnapshot<ListModel> snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    reverse: true,
-                    itemCount: snapshot.data!.result!.length,
-                    itemBuilder: (context, i) {
-                      return ListTile(
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Get.to(ItemDetailsScreen(
-                                  designation:
-                                      snapshot.data!.result![i].designation,
-                                  email: snapshot.data!.result![i].email,
-                                  mobile: snapshot.data!.result![i].mobile,
-                                  name: snapshot.data!.result![i].name,
-                                  id: snapshot.data!.result![i].id.toString(),
-                                  isEdit: true,
-                                ))?.then((value) {
-                                  Get.back();
-                                  print(
-                                      "returning from ItemDetailsScreen $value");
-                                  // if(value.Code==1) {
-                                  var api = InternListApi();
-                                  api.fetchApi();
-                                  setState(() {});
-                                  // }
-                                });
-                              },
-                              icon: Icon(Icons.edit),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                setState(() {});
-                                var api = DeleteInternApi();
-                                await api
-                                    .fetchApi(
-                                  id: snapshot.data!.result![i].id.toString(),
-                                )
-                                    .then((value) {
-                                  print(value);
-                                  Get.back();
-
-                                  /// to update ui
-                                  {
-                                    var api = InternListApi();
-                                    api.fetchApi();
+      body: InternetWidget(
+        online:
+          Container(
+            child: Center(
+              child: FutureBuilder(
+                future: api.fetchApi(),
+                builder: (context, AsyncSnapshot<ListModel> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        reverse: true,
+                        itemCount: snapshot.data!.result!.length,
+                        itemBuilder: (context, i) {
+                          return ListTile(
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Get.to(ItemDetailsScreen(
+                                      designation:
+                                          snapshot.data!.result![i].designation,
+                                      email: snapshot.data!.result![i].email,
+                                      mobile: snapshot.data!.result![i].mobile,
+                                      name: snapshot.data!.result![i].name,
+                                      id: snapshot.data!.result![i].id.toString(),
+                                      isEdit: true,
+                                    ))?.then((value) {
+                                      Get.back();
+                                      print(
+                                          "returning from ItemDetailsScreen $value");
+                                      // if(value.Code==1) {
+                                      var api = InternListApi();
+                                      api.fetchApi();
+                                      setState(() {});
+                                      // }
+                                    });
+                                  },
+                                  icon: Icon(Icons.edit),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
                                     setState(() {});
-                                  }
-                                });
-                              },
-                              icon: Icon(Icons.delete),
+                                    var api = DeleteInternApi();
+                                    await api
+                                        .fetchApi(
+                                      id: snapshot.data!.result![i].id.toString(),
+                                    )
+                                        .then((value) {
+                                      print(value);
+                                      Get.back();
+
+                                      /// to update ui
+                                      {
+                                        var api = InternListApi();
+                                        api.fetchApi();
+                                        setState(() {});
+                                      }
+                                    });
+                                  },
+                                  icon: Icon(Icons.delete),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        onTap: () {
-                          // print(snapshot.data!.result![i].email);
-                          Get.to(ItemDetailsScreen(
-                            name: snapshot.data!.result![i].name!,
-                            mobile: snapshot.data!.result![i].mobile.toString(),
-                            email: snapshot.data!.result![i].email!,
-                            designation: snapshot.data!.result![i].designation,
-                            profile_image:
-                                File(snapshot.data!.result![i].profile_image!),
-                          ));
-                        },
-                        title: Text(snapshot.data!.result![i].name!),
-                        subtitle: Text(snapshot.data!.result![i].email!),
-                      );
-                    });
-              } else if (snapshot.hasError) {
-                return Container(
-                  child: Text(snapshot.error.toString()),
-                );
-              } else {
-                return Container(
-                  child: CircularProgressIndicator(),
-                  color: Colors.black,
-                );
-              }
-            },
+                            onTap: () {
+                              // print(snapshot.data!.result![i].email);
+                              Get.to(ItemDetailsScreen(
+                                name: snapshot.data!.result![i].name!,
+                                mobile: snapshot.data!.result![i].mobile.toString(),
+                                email: snapshot.data!.result![i].email!,
+                                designation: snapshot.data!.result![i].designation,
+                                profile_image:
+                                    File(snapshot.data!.result![i].profile_image!),
+                              ));
+                            },
+                            title: Text(snapshot.data!.result![i].name!),
+                            subtitle: Text(snapshot.data!.result![i].email!),
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    return Container(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  } else {
+                    return Container(
+                      child: CircularProgressIndicator(),
+                      color: Colors.black,
+                    );
+                  }
+                },
+              ),
+            ),
           ),
-        ),
       ),
     );
+  }
+
+  builddialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            alignment: Alignment.center,
+            title: Text('choosealanguage'.tr),
+            content: Container(
+              width: double.maxFinite,
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                          onTap: () {
+                            print(locale[index]['name']);
+                            updatelanguage(locale[index]['locale']);
+                          },
+                          child: Text(
+                            locale[index]['name'],
+                          )),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      color: Colors.purple,
+                    );
+                  },
+                  itemCount: locale.length),
+            ),
+          );
+        });
+  }
+
+  updatelanguage(Locale locale) {
+    Get.back();
+    Get.updateLocale(locale);
   }
 }

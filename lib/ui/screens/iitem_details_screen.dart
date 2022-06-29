@@ -48,7 +48,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Intern Details'),
+        title: Text('internslist'.tr),
       ),
       body: Container(
         // color: Colors.white,
@@ -96,7 +96,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       }
                     });
                   },
-                  child: Text("Save"),
+                  child: Text('save'.tr),
                 ),],
           ),
         ),

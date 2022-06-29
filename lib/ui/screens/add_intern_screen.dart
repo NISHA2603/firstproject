@@ -13,7 +13,7 @@ class AddIntern extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.pink,
-        title: Text('Add Intern Details'),
+        title: Text('addinterndetails'.tr),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -60,8 +60,8 @@ class _InternFormState extends State<InternForm> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 icon: Icon(Icons.person),
-                hintText: 'Enter Your Name',
-                labelText: 'Name',
+                hintText: 'enteryourname'.tr,
+                labelText: 'name'.tr,
               ),
             ),
 
@@ -74,8 +74,8 @@ class _InternFormState extends State<InternForm> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 icon: Icon(Icons.phone_android),
-                hintText: 'Enter Valid Mobile Number',
-                labelText: 'Mobile Number',
+                hintText: 'entervalidmobilenumber'.tr,
+                labelText: 'mobilenumber'.tr,
               ),
             ),
 
@@ -88,8 +88,8 @@ class _InternFormState extends State<InternForm> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 icon: Icon(Icons.perm_identity_outlined),
-                hintText: 'Enter Your Designation',
-                labelText: 'Designation',
+                hintText: 'enteryourdesignation'.tr,
+                labelText: 'designation'.tr,
               ),
             ),
 
@@ -102,8 +102,8 @@ class _InternFormState extends State<InternForm> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 icon: Icon(Icons.mail_outline),
-                hintText: 'Enter Valid Email ID',
-                labelText: 'Email',
+                hintText: 'entervalidemailid'.tr,
+                labelText: 'email'.tr,
               ),
             ),
 
@@ -223,7 +223,7 @@ class _InternFormState extends State<InternForm> {
                     },
                   );
                 },
-                child: const Text('Submit'),
+                child:  Text('submit'.tr),
               ),
             ),
             // Container(

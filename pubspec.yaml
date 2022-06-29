@@ -40,6 +40,13 @@ dependencies:
   dio: any
   provider: any
   shared_preferences: any
+  connectivity_checker: any
+  internet_connection_checker: any
+  overlay_support: any
+  flutter_no_internet_widget: any
+
+
+
 
 dev_dependencies:
   flutter_test:
