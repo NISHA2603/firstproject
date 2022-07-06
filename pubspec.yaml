@@ -44,6 +44,7 @@ dependencies:
   internet_connection_checker: any
   overlay_support: any
   flutter_no_internet_widget: any
+  connectivity_plus: any
 
 
 

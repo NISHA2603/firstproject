@@ -5,8 +5,19 @@ import 'package:image_picker/image_picker.dart';
 import '../../services/apis/intern_list_api.dart';
 import '../../services/apis/add_intern_api.dart';
 
-class AddIntern extends StatelessWidget {
-  const AddIntern({Key? key}) : super(key: key);
+class AddIntern extends StatefulWidget {
+  AddIntern({Key? key}) : super(key: key);
+
+  @override
+  State<AddIntern> createState() => _AddInternState();
+}
+
+class _AddInternState extends State<AddIntern> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController designationController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  File? selectedimage;
 
   @override
   Widget build(BuildContext context) {
@@ -21,32 +32,9 @@ class AddIntern extends StatelessWidget {
           },
         ),
       ),
-      body: InternForm(),
-    );
-  }
-}
-
-class InternForm extends StatefulWidget {
-  const InternForm({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _InternFormState();
-  }
-}
-
-class _InternFormState extends State<InternForm> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController mobileController = TextEditingController();
-  TextEditingController designationController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  File? selectedimage;
-
-  @override
-  Widget build(BuildContext context) {
-    // final _formKey = GlobalKey();
-    return Form(
-      child: SingleChildScrollView(
+      body: SingleChildScrollView(
+          child: Container(
+        // color: Colors.pink,
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,6 +95,8 @@ class _InternFormState extends State<InternForm> {
               ),
             ),
 
+
+
             ///designation form
 
             Container(
@@ -119,7 +109,7 @@ class _InternFormState extends State<InternForm> {
             Container(
               height: 100.0,
               width: 100.0,
-              //  color: Colors.red,
+              // color: Colors.red,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -223,7 +213,7 @@ class _InternFormState extends State<InternForm> {
                     },
                   );
                 },
-                child:  Text('submit'.tr),
+                child: Text('submit'.tr),
               ),
             ),
             // Container(
@@ -231,7 +221,7 @@ class _InternFormState extends State<InternForm> {
             // )
           ],
         ),
-      ),
+      )),
     );
   }
 }
